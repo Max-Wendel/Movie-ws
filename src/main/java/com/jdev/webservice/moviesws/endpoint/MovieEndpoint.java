@@ -12,7 +12,7 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
 @Endpoint
 public class MovieEndpoint {
-    public static final String NAMESPACE_URI = "http://www.javaspringclub.com/movies-ws";
+    public static final String NAMESPACE_URI = "http://www.abstract.com/movies-ws";
 
     @Autowired
     MovieService service;

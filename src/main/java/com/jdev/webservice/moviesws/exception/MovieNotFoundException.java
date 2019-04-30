@@ -9,7 +9,7 @@ import org.springframework.ws.soap.server.endpoint.annotation.SoapFault;
 public class MovieNotFoundException extends Exception {
 
     private static final long serialVersionUID = 1L;
-    public static final String NAMESPACE_URI = "http://javaspringclub.com/exception";
+    public static final String NAMESPACE_URI = "http://abstract.com/exception";
 
     public MovieNotFoundException(String message) {
         super(message);
