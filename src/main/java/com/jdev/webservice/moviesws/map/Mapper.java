@@ -1,9 +1,6 @@
 package com.jdev.webservice.moviesws.map;
 
-import com.jdev.webservice.moviesws.generate.GetAllMoviesRequest;
-import com.jdev.webservice.moviesws.generate.GetAllMoviesResponse;
-import com.jdev.webservice.moviesws.generate.GetMovieByIdResponse;
-import com.jdev.webservice.moviesws.generate.MovieType;
+import com.jdev.webservice.moviesws.generate.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,5 +18,31 @@ public class Mapper{
         GetAllMoviesResponse response = new GetAllMoviesResponse();
         response.setMovieType(movies);
         return response;
+    }
+
+    public DeleteMovieResponse mapD(ServiceStatus status){
+        DeleteMovieResponse response = new DeleteMovieResponse();
+        response.setServiceStatus(status);
+        return response;
+    }
+
+    public AddMovieResponse map(ServiceStatus status, AddMovieRequest request){
+        AddMovieResponse response = new AddMovieResponse();
+        response.setServiceStatus(status);
+        response.setMovieType(map(request));
+        return response;
+    }
+
+    public UpdateMovieResponse mapU(ServiceStatus serviceStatus){
+        UpdateMovieResponse response = new UpdateMovieResponse();
+        response.setServiceStatus(serviceStatus);
+        return response;
+    }
+
+    private MovieType map(AddMovieRequest request){
+        MovieType movieType = new MovieType();
+        movieType.setCategory(request.getCategory());
+        movieType.setTitle(request.getTitle());
+        return  movieType;
     }
 }

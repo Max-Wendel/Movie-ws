@@ -1,7 +1,10 @@
 package com.jdev.webservice.moviesws.service;
 
+import com.jdev.webservice.moviesws.exception.MovieNotFoundException;
+import com.jdev.webservice.moviesws.generate.AddMovieRequest;
 import com.jdev.webservice.moviesws.generate.MovieType;
 import com.jdev.webservice.moviesws.generate.ServiceStatus;
+import com.jdev.webservice.moviesws.generate.UpdateMovieRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,6 +13,9 @@ import java.util.List;
 
 @Service
 public class MovieService {
+
+    private final ServiceStatus OK = new ServiceStatus("OK","SUCCESS");
+    private final ServiceStatus ERROR = new ServiceStatus("ERROR","FAILURE");
 
     private static List<MovieType> movies = new ArrayList<>();
 
@@ -35,7 +41,6 @@ public class MovieService {
 
     }
 
-    // Get Movie By Id - 1
     public MovieType findById(long id) {
         for (MovieType movie : movies) {
             if (movie.getMovieId() == id)
@@ -44,28 +49,63 @@ public class MovieService {
         return null;
     }
 
-    // Get All movies
-    public List<MovieType> findAll() {
+    public MovieType findByTitle(String title){
+        int pos = findPositionTitle(title);
+        if (pos == -1){
+            return null;
+        }else {
+            return movies.get(pos);
+        }
+    }
+
+    private int findPositionTitle(String title){
+        int pos = -1;
+
+        for (MovieType movie:movies){
+            pos++;
+            if (movie.getTitle().equals(title)){
+                return pos;
+            }
+        }
+        return -1;
+    }
+
+    public List<MovieType> getAll() {
         return movies;
     }
 
-    public ServiceStatus deleteById(int id) {
+    public ServiceStatus deleteById(long id) {
         Iterator iterator = movies.iterator();
-        ServiceStatus status = new ServiceStatus();
         MovieType movie;
         while (iterator.hasNext()) {
             movie = (MovieType) iterator.next();
             if (movie.getMovieId() == id) {
                 iterator.remove();
 
-                status.setStatusCode("OK");
-                status.setMessage("SUCCESS");
-                return status;
+                return OK;
             }
         }
-        status.setStatusCode("ERROR");
-        status.setMessage("FAILURE");
-        return status;
+        return ERROR;
+    }
+
+    public ServiceStatus saveMovie(AddMovieRequest request){
+        MovieType newMovie = new MovieType();
+        newMovie.setTitle(request.getTitle());
+        newMovie.setCategory(request.getCategory());
+        movies.add(newMovie);
+        return OK;
+    }
+
+    public ServiceStatus updateMovie(UpdateMovieRequest request){
+        int pos = findPositionTitle(request.getTitle());
+
+        if (pos == -1){
+            return ERROR;
+        }else {
+            movies.get(pos).setTitle(request.getTitle());
+            movies.get(pos).setCategory(request.getCategory());
+        }
+        return OK;
     }
 
 }

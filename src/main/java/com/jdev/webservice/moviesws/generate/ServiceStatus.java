@@ -46,6 +46,15 @@ public class ServiceStatus {
     @XmlElement(required = true)
     protected String message;
 
+    public ServiceStatus(String statusCode, String message) {
+        this.statusCode = statusCode;
+        this.message = message;
+    }
+
+    public ServiceStatus(){
+
+    }
+
     /**
      * Obtém o valor da propriedade statusCode.
      * 
