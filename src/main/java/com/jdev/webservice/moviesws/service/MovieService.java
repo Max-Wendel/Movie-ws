@@ -18,7 +18,8 @@ import java.util.Optional;
 public class MovieService {
 
     private final ServiceStatus OK = new ServiceStatus("OK","SUCCESS");
-    private final ServiceStatus FAULT = new ServiceStatus("FAULT","FAILURE");
+    private final ServiceStatus NOT_FOUND = new ServiceStatus("ERROR","MOVIE_NOT_FOUND");
+    private final ServiceStatus ALREADY_EXIST = new ServiceStatus("ERROR","MOVIE_ALREADY_EXIST");
 
     @Autowired
     private MovieRepository repository;
@@ -33,9 +34,18 @@ public class MovieService {
         return movie.map(value -> modelMapper.map(value, MovieType.class)).orElse(null);
     }
 
-    public MovieType findByTitle(String title){
+    public MovieType findByTitle(String title) {
         Optional<Movie> movie = repository.findMovieByTitle(title);
         return movie.map(value -> modelMapper.map(value, MovieType.class)).orElse(null);
+    }
+
+    public ServiceStatus isPresent(long id){
+        Optional<Movie> movie = repository.findById(id);
+        if (movie.isPresent()){
+            return OK;
+        }else {
+            return NOT_FOUND;
+        }
     }
 
     public List<MovieType> getAll() {
@@ -55,14 +65,14 @@ public class MovieService {
             repository.deleteById(id);
             return OK;
         }
-        return FAULT;
+        return NOT_FOUND;
     }
 
     public ServiceStatus saveMovie(AddMovieRequest request){
         Optional<Movie> movie = repository.findMovieByTitle(request.getTitle());
 
         if (movie.isPresent()){
-            return FAULT;
+            return ALREADY_EXIST;
         }
 
         MovieType newMovie = new MovieType();
@@ -78,7 +88,7 @@ public class MovieService {
         Optional<Movie> movie = repository.findMovieByTitle(request.getTitle());
 
         if (!movie.isPresent()){
-            return FAULT;
+            return NOT_FOUND;
         }
 
         MovieType newMovie = new MovieType();

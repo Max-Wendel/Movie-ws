@@ -8,41 +8,45 @@ import java.util.List;
 @Component
 public class Mapper{
 
-    public GetMovieByIdResponse map(MovieType movie) {
+    public GetMovieByIdResponse mapGetMovieByIdResponse(ServiceStatus status, MovieType movie) {
         GetMovieByIdResponse response = new GetMovieByIdResponse();
         response.setMovieType(movie);
         return response;
     }
 
-    public GetAllMoviesResponse map(List<MovieType> movies){
+    public GetAllMoviesResponse mapGetAllMoviesResponse(List<MovieType> movies){
         GetAllMoviesResponse response = new GetAllMoviesResponse();
         response.setMovieType(movies);
         return response;
     }
 
-    public DeleteMovieResponse mapD(ServiceStatus status){
+    public DeleteMovieResponse mapDeleteMovieResponse(ServiceStatus status){
         DeleteMovieResponse response = new DeleteMovieResponse();
         response.setServiceStatus(status);
         return response;
     }
 
-    public AddMovieResponse map(ServiceStatus status, AddMovieRequest request){
+    public AddMovieResponse mapAddMovieResponse(ServiceStatus status, MovieType movie){
         AddMovieResponse response = new AddMovieResponse();
-        if (status.getMessage().equals("FAULT")){
-            status.setMessage("MOVIE ALREADY EXIST");
-            response.setServiceStatus(status);
-        }
+        response.setServiceStatus(status);
+        response.setMovieType(movie);
+        return response;
+    }
+
+    public UpdateMovieResponse mapUpdateMovieResponse(ServiceStatus serviceStatus, UpdateMovieRequest request){
+        UpdateMovieResponse response = new UpdateMovieResponse();
+        response.setServiceStatus(serviceStatus);
         response.setMovieType(map(request));
         return response;
     }
 
-    public UpdateMovieResponse mapU(ServiceStatus serviceStatus){
-        UpdateMovieResponse response = new UpdateMovieResponse();
-        response.setServiceStatus(serviceStatus);
-        return response;
-    }
-
     private MovieType map(AddMovieRequest request){
+        MovieType movieType = new MovieType();
+        movieType.setCategory(request.getCategory());
+        movieType.setTitle(request.getTitle());
+        return  movieType;
+    }
+    private MovieType map(UpdateMovieRequest request){
         MovieType movieType = new MovieType();
         movieType.setCategory(request.getCategory());
         movieType.setTitle(request.getTitle());

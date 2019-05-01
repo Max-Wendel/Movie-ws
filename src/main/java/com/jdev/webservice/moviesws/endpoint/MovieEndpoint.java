@@ -1,6 +1,5 @@
 package com.jdev.webservice.moviesws.endpoint;
 
-import com.jdev.webservice.moviesws.exception.MovieNotFoundException;
 import com.jdev.webservice.moviesws.generate.*;
 import com.jdev.webservice.moviesws.map.Mapper;
 import com.jdev.webservice.moviesws.service.MovieService;
@@ -22,49 +21,31 @@ public class MovieEndpoint {
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getMovieByIdRequest")
     @ResponsePayload
-    public GetMovieByIdResponse getMovieById(@RequestPayload GetMovieByIdRequest request) throws MovieNotFoundException {
-        MovieType movie = service.findById(request.getMovieId());
-
-        if (movie == null) {
-            throw new MovieNotFoundException("Invalid Movie Id " + request.getMovieId());
-        }
-
-        return mapper.map(movie);
+    public GetMovieByIdResponse getMovieById(@RequestPayload GetMovieByIdRequest request) {
+        return mapper.mapGetMovieByIdResponse(service.isPresent(request.getMovieId()),service.findById(request.getMovieId()));
     }
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "addMovieRequest")
     @ResponsePayload
     public AddMovieResponse addMovie(@RequestPayload AddMovieRequest request){
-        return mapper.map(service.saveMovie(request),request);
+        return mapper.mapAddMovieResponse(service.saveMovie(request),service.findByTitle(request.getTitle()));
     }
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getAllMoviesRequest")
     @ResponsePayload
     public GetAllMoviesResponse getAll(@RequestPayload GetAllMoviesRequest request){
-        return mapper.map(service.getAll());
+        return mapper.mapGetAllMoviesResponse(service.getAll());
     }
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "deleteMovieRequest")
     @ResponsePayload
-    public DeleteMovieResponse deleteMovieById(@RequestPayload DeleteMovieRequest request) throws MovieNotFoundException {
-        MovieType movie = service.findById(request.getMovieId());
-
-        if (movie == null) {
-            throw new MovieNotFoundException("Invalid Movie Id " + request.getMovieId());
-        }
-
-        return mapper.mapD(service.deleteById(request.getMovieId()));
+    public DeleteMovieResponse deleteMovieById(@RequestPayload DeleteMovieRequest request){
+        return mapper.mapDeleteMovieResponse(service.deleteById(request.getMovieId()));
     }
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "updateMovieRequest")
     @ResponsePayload
-    public UpdateMovieResponse updateMovie(@RequestPayload UpdateMovieRequest request) throws MovieNotFoundException {
-        MovieType movie = service.findByTitle(request.getTitle());
-
-        if (movie == null) {
-            throw new MovieNotFoundException("Invalid Movie Title " + request.getTitle());
-        }
-
-        return mapper.mapU(service.updateMovie(request));
+    public UpdateMovieResponse updateMovie(@RequestPayload UpdateMovieRequest request) {
+        return mapper.mapUpdateMovieResponse(service.updateMovie(request),request);
     }
 }
