@@ -11,10 +11,6 @@ import java.util.List;
 @Service
 public class MovieService {
 
-    public enum Status{
-        SUCCESS, FAILURE;
-    }
-
     private static List<MovieType> movies = new ArrayList<>();
 
     static {
@@ -49,7 +45,7 @@ public class MovieService {
     }
 
     // Get All movies
-    public List findAll() {
+    public List<MovieType> findAll() {
         return movies;
     }
 
@@ -61,14 +57,12 @@ public class MovieService {
             movie = (MovieType) iterator.next();
             if (movie.getMovieId() == id) {
                 iterator.remove();
-                // return Status.SUCCESS;
 
                 status.setStatusCode("OK");
                 status.setMessage("SUCCESS");
                 return status;
             }
         }
-        // return Status.FAILURE;
         status.setStatusCode("ERROR");
         status.setMessage("FAILURE");
         return status;

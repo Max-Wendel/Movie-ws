@@ -75,4 +75,7 @@ public class GetAllMoviesResponse {
         return this.movieType;
     }
 
+    public void setMovieType(List<MovieType> movieType) {
+        this.movieType = movieType;
+    }
 }
