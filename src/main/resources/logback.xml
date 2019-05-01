@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <property name="LOG_PATH" value="logs"/>
+
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <logger name="org.springframework.web" level="INFO"/>
+
+    <!--Appender do tipo FileAppender responsavel pelos dados do arquivo de saida de log -->
+    <appender name="SAVE-TO-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--Local do Arquivo de log-->
+        <file>${LOG_PATH}/application.log</file>
+
+        <!--Formato do log-->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n</Pattern>
+        </encoder>
+
+        <!--Politica de armazenamento de log-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+
+            <!--Guarda os logs nesse diretorio com os seguintes formatos-->
+            <fileNamePattern>${LOG_PATH}/archived/log_%d{dd-MM-yyyy}_%i.log</fileNamePattern>
+
+            <!--Capacidade máxima de um arquivo de log-->
+            <maxFileSize>10MB</maxFileSize>
+
+            <!--Tempo máximo de armazenamento de um log-->
+            <!--<maxHistory>10</maxHistory>-->
+
+            <!--Capacidade total de todos os logs-->
+            <totalSizeCap>100MB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!--Appender responsavel pelo monitoramento do servidor tomcat-->
+    <logger name="org.springframework.boot.web.embedded.tomcat.TomcatWebServer" level="INFO">
+        <!--Salvando no arquivo de saida-->
+        <appender-ref ref="SAVE-TO-FILE"/>
+    </logger>
+
+    <!--Appender responsavel pelo monitoramento das mensagens enviadas pela aplicacao-->
+    <logger name="org.springframework.ws.client.MessageTracing.sent" level="TRACE">
+        <!--Salvando no arquivo de saida-->
+        <appender-ref ref="SAVE-TO-FILE"/>
+    </logger>
+
+    <!--Appender responsavel pelo monitoramento das mensagens recebidas pela aplicacao-->
+    <logger name="org.springframework.ws.client.MessageTracing.received" level="TRACE">
+        <!--Salvando no arquivo de saida-->
+        <appender-ref ref="SAVE-TO-FILE"/>
+    </logger>
+
+    <!--Appender responsavel pelo monitoramento das mensagens do servidor-->
+    <logger name="org.springframework.ws.server.MessageTracing" level="TRACE">
+        <!--Salvando no arquivo de saida-->
+        <appender-ref ref="SAVE-TO-FILE"/>
+    </logger>
+
+</configuration>
