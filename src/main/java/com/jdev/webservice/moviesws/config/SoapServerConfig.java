@@ -1,8 +1,6 @@
 package com.jdev.webservice.moviesws.config;
 
 import com.jdev.webservice.moviesws.endpoint.MovieEndpoint;
-import com.jdev.webservice.moviesws.exception.DetailSoapFaultDefinitionExceptionResolver;
-import com.jdev.webservice.moviesws.exception.ServiceFaultException;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -47,22 +45,6 @@ public class SoapServerConfig extends WsConfigurerAdapter {
     @Bean
     public XsdSchema moviesSchema() {
         return new SimpleXsdSchema(new ClassPathResource("/xsd/movies.xsd"));
-    }
-
-    @Bean
-    public SoapFaultMappingExceptionResolver exceptionResolver() {
-        SoapFaultMappingExceptionResolver exceptionResolver = new DetailSoapFaultDefinitionExceptionResolver();
-
-        SoapFaultDefinition faultDefinition = new SoapFaultDefinition();
-        faultDefinition.setFaultCode(SoapFaultDefinition.SERVER);
-        exceptionResolver.setDefaultFault(faultDefinition);
-
-        Properties errorMappings = new Properties();
-        errorMappings.setProperty(Exception.class.getName(), SoapFaultDefinition.SERVER.toString());
-        errorMappings.setProperty(ServiceFaultException.class.getName(), SoapFaultDefinition.SERVER.toString());
-        exceptionResolver.setExceptionMappings(errorMappings);
-        exceptionResolver.setOrder(1);
-        return exceptionResolver;
     }
 
     @Override
