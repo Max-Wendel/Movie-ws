@@ -46,7 +46,13 @@ public class MovieEndpoint {
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "deleteMovieRequest")
     @ResponsePayload
-    public DeleteMovieResponse deleteMovieById(@RequestPayload DeleteMovieRequest request) {
+    public DeleteMovieResponse deleteMovieById(@RequestPayload DeleteMovieRequest request) throws MovieNotFoundException {
+        MovieType movie = service.findById(request.getMovieId());
+
+        if (movie == null) {
+            throw new MovieNotFoundException("Invalid Movie Id " + request.getMovieId());
+        }
+
         return mapper.mapD(service.deleteById(request.getMovieId()));
     }
 
@@ -56,7 +62,7 @@ public class MovieEndpoint {
         MovieType movie = service.findByTitle(request.getTitle());
 
         if (movie == null) {
-            throw new MovieNotFoundException("Invalid Movie Id " + request.getTitle());
+            throw new MovieNotFoundException("Invalid Movie Title " + request.getTitle());
         }
 
         return mapper.mapU(service.updateMovie(request));

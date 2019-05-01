@@ -28,7 +28,10 @@ public class Mapper{
 
     public AddMovieResponse map(ServiceStatus status, AddMovieRequest request){
         AddMovieResponse response = new AddMovieResponse();
-        response.setServiceStatus(status);
+        if (status.getMessage().equals("FAULT")){
+            status.setMessage("MOVIE ALREADY EXIST");
+            response.setServiceStatus(status);
+        }
         response.setMovieType(map(request));
         return response;
     }

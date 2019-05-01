@@ -1,111 +1,104 @@
 package com.jdev.webservice.moviesws.service;
 
-import com.jdev.webservice.moviesws.exception.MovieNotFoundException;
 import com.jdev.webservice.moviesws.generate.AddMovieRequest;
 import com.jdev.webservice.moviesws.generate.MovieType;
 import com.jdev.webservice.moviesws.generate.ServiceStatus;
 import com.jdev.webservice.moviesws.generate.UpdateMovieRequest;
+import com.jdev.webservice.moviesws.model.Movie;
+import com.jdev.webservice.moviesws.repository.MovieRepository;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MovieService {
 
     private final ServiceStatus OK = new ServiceStatus("OK","SUCCESS");
-    private final ServiceStatus ERROR = new ServiceStatus("ERROR","FAILURE");
+    private final ServiceStatus FAULT = new ServiceStatus("FAULT","FAILURE");
+
+    @Autowired
+    private MovieRepository repository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     private static List<MovieType> movies = new ArrayList<>();
 
-    static {
-        MovieType movie1 = new MovieType();
-        movie1.setMovieId(101);
-        movie1.setTitle("Mission Impossible");
-        movie1.setCategory("Action");
-
-        movies.add(movie1);
-
-        MovieType movie2 = new MovieType();
-        movie2.setMovieId(102);
-        movie2.setTitle("Argo");
-        movie2.setCategory("Drama");
-        movies.add(movie2);
-
-        MovieType movie3 = new MovieType();
-        movie3.setMovieId(103);
-        movie3.setTitle("Hang over");
-        movie3.setCategory("Comedy");
-        movies.add(movie3);
-
-    }
-
     public MovieType findById(long id) {
-        for (MovieType movie : movies) {
-            if (movie.getMovieId() == id)
-                return movie;
-        }
-        return null;
+        Optional<Movie> movie = repository.findById(id);
+        return movie.map(value -> modelMapper.map(value, MovieType.class)).orElse(null);
     }
 
     public MovieType findByTitle(String title){
-        int pos = findPositionTitle(title);
-        if (pos == -1){
-            return null;
-        }else {
-            return movies.get(pos);
-        }
-    }
-
-    private int findPositionTitle(String title){
-        int pos = -1;
-
-        for (MovieType movie:movies){
-            pos++;
-            if (movie.getTitle().equals(title)){
-                return pos;
-            }
-        }
-        return -1;
+        Optional<Movie> movie = repository.findMovieByTitle(title);
+        return movie.map(value -> modelMapper.map(value, MovieType.class)).orElse(null);
     }
 
     public List<MovieType> getAll() {
-        return movies;
+        List<MovieType> result = new ArrayList<>();
+        List<Movie> movies = repository.findAll();
+
+        for (Movie movie:movies){
+            result.add(modelMapper.map(movie,MovieType.class));
+        }
+
+        return result;
     }
 
     public ServiceStatus deleteById(long id) {
-        Iterator iterator = movies.iterator();
-        MovieType movie;
-        while (iterator.hasNext()) {
-            movie = (MovieType) iterator.next();
-            if (movie.getMovieId() == id) {
-                iterator.remove();
-
-                return OK;
-            }
+        MovieType movie = findById(id);
+        if (movie != null){
+            repository.deleteById(id);
+            return OK;
         }
-        return ERROR;
+        return FAULT;
     }
 
     public ServiceStatus saveMovie(AddMovieRequest request){
+        Optional<Movie> movie = repository.findMovieByTitle(request.getTitle());
+
+        if (movie.isPresent()){
+            return FAULT;
+        }
+
         MovieType newMovie = new MovieType();
         newMovie.setTitle(request.getTitle());
         newMovie.setCategory(request.getCategory());
-        movies.add(newMovie);
+
+        repository.save(map(newMovie));
+
         return OK;
     }
 
     public ServiceStatus updateMovie(UpdateMovieRequest request){
-        int pos = findPositionTitle(request.getTitle());
+        Optional<Movie> movie = repository.findMovieByTitle(request.getTitle());
 
-        if (pos == -1){
-            return ERROR;
-        }else {
-            movies.get(pos).setTitle(request.getTitle());
-            movies.get(pos).setCategory(request.getCategory());
+        if (!movie.isPresent()){
+            return FAULT;
         }
+
+        MovieType newMovie = new MovieType();
+        newMovie.setTitle(request.getTitle());
+        newMovie.setCategory(request.getCategory());
+
+        Movie movieToUpdate = map(newMovie);
+        movieToUpdate.setMovieId(movie.get().getMovieId());
+
+        repository.save(movieToUpdate);
+
         return OK;
+    }
+
+    private Movie map(MovieType movieType){
+        return modelMapper.map(movieType,Movie.class);
+    }
+
+    private MovieType map(Movie movie){
+        return modelMapper.map(movie,MovieType.class);
     }
 
 }
