@@ -1,0 +1,8 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:mov="http://www.abstract.com/movies-ws">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <mov:addMovieRequest>
+         <mov:title>Test</mov:title>
+      </mov:addMovieRequest>
+   </soapenv:Body>
+</soapenv:Envelope>

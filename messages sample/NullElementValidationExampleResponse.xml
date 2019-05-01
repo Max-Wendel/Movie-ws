@@ -1,0 +1,12 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <SOAP-ENV:Fault>
+         <faultcode>SOAP-ENV:Client</faultcode>
+         <faultstring xml:lang="en">Validation error</faultstring>
+         <detail>
+            <spring-ws:ValidationError xmlns:spring-ws="http://springframework.org/spring-ws">cvc-complex-type.2.4.b: O conteúdo do elemento 'mov:addMovieRequest' não está completo. Era esperado um dos '{"http://www.abstract.com/movies-ws":category}'.</spring-ws:ValidationError>
+         </detail>
+      </SOAP-ENV:Fault>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
