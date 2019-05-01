@@ -60,7 +60,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<plugin>
+<!-- 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jaxb2-maven-plugin</artifactId>
 				<version>2.3.1</version>
@@ -79,7 +79,7 @@
 					<packageName>com.jdev.webservice.moviesws.generate</packageName>
 					<clearOutputDir>false</clearOutputDir>
 				</configuration>
-			</plugin>
+			</plugin> -->
 		</plugins>
 	</build>
 
