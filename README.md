@@ -1,4 +1,7 @@
 # Movies-ws
+
+[![CircleCI](https://circleci.com/gh/Max-Wendel-UFC/Movie-ws.svg?style=svg)](https://circleci.com/gh/Max-Wendel-UFC/Movie-ws)
+
 ### Web Service SOAP to maintenance of Movies
 
 ### See:
