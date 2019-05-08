@@ -89,7 +89,7 @@ public class Movie {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Movie movie = (Movie) o;
-        return movieId == movie.movieId;
+        return movieId.equals(movie.movieId);
     }
 
     @Override

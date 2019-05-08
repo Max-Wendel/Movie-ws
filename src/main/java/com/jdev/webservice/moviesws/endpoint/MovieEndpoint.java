@@ -14,10 +14,10 @@ public class MovieEndpoint {
     public static final String NAMESPACE_URI = "http://www.abstract.com/movies-ws";
 
     @Autowired
-    MovieService service;
+    private MovieService service;
 
     @Autowired
-    Mapper mapper;
+    private Mapper mapper;
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getMovieByIdRequest")
     @ResponsePayload

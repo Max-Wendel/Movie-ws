@@ -40,12 +40,6 @@ public class Mapper{
         return response;
     }
 
-    private MovieType map(AddMovieRequest request){
-        MovieType movieType = new MovieType();
-        movieType.setCategory(request.getCategory());
-        movieType.setTitle(request.getTitle());
-        return  movieType;
-    }
     private MovieType map(UpdateMovieRequest request){
         MovieType movieType = new MovieType();
         movieType.setCategory(request.getCategory());

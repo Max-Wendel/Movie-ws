@@ -107,8 +107,4 @@ public class MovieService {
         return modelMapper.map(movieType,Movie.class);
     }
 
-    private MovieType map(Movie movie){
-        return modelMapper.map(movie,MovieType.class);
-    }
-
 }
