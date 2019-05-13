@@ -17,9 +17,9 @@ import java.util.Optional;
 @Service
 public class MovieService {
 
-    private final ServiceStatus OK = new ServiceStatus("OK","SUCCESS");
-    private final ServiceStatus NOT_FOUND = new ServiceStatus("ERROR","MOVIE_NOT_FOUND");
-    private final ServiceStatus ALREADY_EXIST = new ServiceStatus("ERROR","MOVIE_ALREADY_EXIST");
+    private final ServiceStatus okStatus = new ServiceStatus("okStatus", "SUCCESS");
+    private final ServiceStatus notFoundStatus = new ServiceStatus("ERROR", "MOVIE_NOT_FOUND");
+    private final ServiceStatus alreadyExistStatus = new ServiceStatus("ERROR", "MOVIE_ALREADY_EXIST");
 
     @Autowired
     private MovieRepository repository;
@@ -42,9 +42,9 @@ public class MovieService {
     public ServiceStatus isPresent(long id){
         Optional<Movie> movie = repository.findById(id);
         if (movie.isPresent()){
-            return OK;
+            return okStatus;
         }else {
-            return NOT_FOUND;
+            return notFoundStatus;
         }
     }
 
@@ -53,7 +53,7 @@ public class MovieService {
         List<Movie> movies = repository.findAll();
 
         for (Movie movie:movies){
-            result.add(modelMapper.map(movie,MovieType.class));
+            result.add(modelMapper.map(movie, MovieType.class));
         }
 
         return result;
@@ -63,16 +63,16 @@ public class MovieService {
         MovieType movie = findById(id);
         if (movie != null){
             repository.deleteById(id);
-            return OK;
+            return okStatus;
         }
-        return NOT_FOUND;
+        return notFoundStatus;
     }
 
     public ServiceStatus saveMovie(AddMovieRequest request){
         Optional<Movie> movie = repository.findMovieByTitle(request.getTitle());
 
         if (movie.isPresent()){
-            return ALREADY_EXIST;
+            return alreadyExistStatus;
         }
 
         MovieType newMovie = new MovieType();
@@ -81,14 +81,14 @@ public class MovieService {
 
         repository.save(map(newMovie));
 
-        return OK;
+        return okStatus;
     }
 
     public ServiceStatus updateMovie(UpdateMovieRequest request){
         Optional<Movie> movie = repository.findMovieByTitle(request.getTitle());
 
         if (!movie.isPresent()){
-            return NOT_FOUND;
+            return notFoundStatus;
         }
 
         MovieType newMovie = new MovieType();
@@ -100,11 +100,11 @@ public class MovieService {
 
         repository.save(movieToUpdate);
 
-        return OK;
+        return okStatus;
     }
 
     private Movie map(MovieType movieType){
-        return modelMapper.map(movieType,Movie.class);
+        return modelMapper.map(movieType, Movie.class);
     }
 
 }

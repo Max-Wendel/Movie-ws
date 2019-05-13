@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "getMovieByIdRequest")
 public class GetMovieByIdRequest {
 
-    protected long movieId;
+    private long movieId;
 
     /**
      * Obtém o valor da propriedade movieId.

@@ -42,9 +42,9 @@ import javax.xml.bind.annotation.XmlType;
 public class ServiceStatus {
 
     @XmlElement(required = true)
-    protected String statusCode;
+    private String statusCode;
     @XmlElement(required = true)
-    protected String message;
+    private String message;
 
     public ServiceStatus(String statusCode, String message) {
         this.statusCode = statusCode;

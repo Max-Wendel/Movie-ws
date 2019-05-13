@@ -42,7 +42,7 @@ public class AddMovieRequest {
     @XmlElement(required = true)
     protected String title;
     @XmlElement(required = true)
-    protected String category;
+    private String category;
 
     /**
      * Obtém o valor da propriedade title.

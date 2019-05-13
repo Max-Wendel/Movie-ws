@@ -1,6 +1,13 @@
 package com.jdev.webservice.moviesws.map;
 
-import com.jdev.webservice.moviesws.generate.*;
+import com.jdev.webservice.moviesws.generate.GetAllMoviesResponse;
+import com.jdev.webservice.moviesws.generate.GetMovieByIdResponse;
+import com.jdev.webservice.moviesws.generate.MovieType;
+import com.jdev.webservice.moviesws.generate.DeleteMovieResponse;
+import com.jdev.webservice.moviesws.generate.AddMovieResponse;
+import com.jdev.webservice.moviesws.generate.UpdateMovieRequest;
+import com.jdev.webservice.moviesws.generate.UpdateMovieResponse;
+import com.jdev.webservice.moviesws.generate.ServiceStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -10,6 +17,7 @@ public class Mapper{
 
     public GetMovieByIdResponse mapGetMovieByIdResponse(ServiceStatus status, MovieType movie) {
         GetMovieByIdResponse response = new GetMovieByIdResponse();
+        response.setServiceStatus(status);
         response.setMovieType(movie);
         return response;
     }
