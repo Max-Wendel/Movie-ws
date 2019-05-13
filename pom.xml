@@ -76,10 +76,39 @@
 				<groupId>com.github.spotbugs</groupId>
 				<artifactId>spotbugs-maven-plugin</artifactId>
 				<version>3.1.7</version>
-				<configuration>
-					<effort>Min</effort>
-					<threshold>High</threshold>
-				</configuration>
+				<executions>
+					<execution>
+						<id>spotbugs</id>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<effort>Min</effort>
+							<threshold>High</threshold>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>checkstyle</id>
+						<configuration>
+							<configLocation>checkstyle/checkstyle.xml</configLocation>
+							<encoding>UTF-8</encoding>
+							<consoleOutput>true</consoleOutput>
+							<failsOnError>true</failsOnError>
+							<suppressionsLocation>checkstyle/supress.xml</suppressionsLocation>
+							<suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
+						</configuration>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<!-- 			<plugin>
                             <groupId>org.codehaus.mojo</groupId>
